@@ -1,5 +1,4 @@
-// Caregivers Tab - Manage caretakers
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,7 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  Alert
+  Alert,
 } from 'react-native';
 
 type Caregiver = {
@@ -18,18 +17,12 @@ type Caregiver = {
 };
 
 export default function CaregiversTab() {
-  // State for caregivers list
-  const [caregivers, setCaregivers] = useState<Caregiver[]>([
-    { id: 1, name: 'Sarah Johnson', phone: '+1 (555) 123-4567', relationship: 'Daughter' },
-    { id: 2, name: 'John Smith', phone: '+1 (555) 987-6543', relationship: 'Son' },
-  ]);
-
-  // State for new caregiver form
+  const idCounter = useRef(1);
+  const [caregivers, setCaregivers] = useState<Caregiver[]>([]);
   const [newName, setNewName] = useState('');
   const [newPhone, setNewPhone] = useState('');
   const [newRelationship, setNewRelationship] = useState('');
 
-  // Function to add new caregiver
   const addCaregiver = () => {
     if (!newName || !newPhone) {
       Alert.alert('Error', 'Please enter name and phone number');
@@ -37,34 +30,35 @@ export default function CaregiversTab() {
     }
 
     const newCaregiver: Caregiver = {
-      id: caregivers.length + 1,
-      name: newName,
-      phone: newPhone,
-      relationship: newRelationship || 'Caregiver',
+      id: idCounter.current++,
+      name: newName.trim(),
+      phone: newPhone.trim(),
+      relationship: newRelationship.trim() || 'Caregiver',
     };
 
     setCaregivers([...caregivers, newCaregiver]);
-    
-    // Clear form
     setNewName('');
     setNewPhone('');
     setNewRelationship('');
-    
-    Alert.alert('Success', 'Caregiver added successfully');
+
+    Alert.alert('Success', `${newCaregiver.name} added`);
   };
 
-  // Function to remove caregiver
   const removeCaregiver = (id: number) => {
+    const caregiver = caregivers.find(c => c.id === id);
+    
     Alert.alert(
       'Remove Caregiver',
-      'Are you sure?',
+      `Remove ${caregiver?.name}?`,
       [
         { text: 'Cancel', style: 'cancel' },
         {
           text: 'Remove',
           style: 'destructive',
           onPress: () => {
-            setCaregivers(caregivers.filter(c => c.id !== id));
+            setCaregivers(currentCaregivers => 
+              currentCaregivers.filter(caregiver => caregiver.id !== id)
+            );
           },
         },
       ]
@@ -74,19 +68,21 @@ export default function CaregiversTab() {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>👥 Caregivers</Text>
-      <Text style={styles.subtitle}>People to notify if you miss your stop</Text>
+      <Text style={styles.subtitle}>
+        Contacts to notify if you miss your stop
+      </Text>
 
-      {/* Add New Caregiver Form */}
-      <View style={styles.formContainer}>
-        <Text style={styles.formTitle}>Add New Caregiver</Text>
-        
+      {/* Add Caregiver Form */}
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>Add New Caregiver</Text>
+
         <TextInput
           style={styles.input}
-          placeholder="Name"
+          placeholder="Full Name"
           value={newName}
           onChangeText={setNewName}
         />
-        
+
         <TextInput
           style={styles.input}
           placeholder="Phone Number"
@@ -94,46 +90,77 @@ export default function CaregiversTab() {
           onChangeText={setNewPhone}
           keyboardType="phone-pad"
         />
-        
+
         <TextInput
           style={styles.input}
           placeholder="Relationship (optional)"
           value={newRelationship}
           onChangeText={setNewRelationship}
         />
-        
-        <TouchableOpacity style={styles.addButton} onPress={addCaregiver}>
-          <Text style={styles.addButtonText}>Add Caregiver</Text>
+
+        <TouchableOpacity
+          style={[
+            styles.primaryButton,
+            (!newName || !newPhone) && styles.disabledButton,
+          ]}
+          onPress={addCaregiver}
+          disabled={!newName || !newPhone}
+        >
+          <Text style={styles.primaryButtonText}>Add Caregiver</Text>
         </TouchableOpacity>
       </View>
 
       {/* Caregivers List */}
-      <Text style={styles.listTitle}>Your Caregivers ({caregivers.length})</Text>
-      
+      <Text style={styles.sectionTitle}>
+        Your Caregivers ({caregivers.length})
+      </Text>
+
       {caregivers.length === 0 ? (
-        <Text style={styles.emptyText}>No caregivers added yet</Text>
+        <View style={styles.emptyBox}>
+          <Text style={styles.emptyEmoji}>👤</Text>
+          <Text style={styles.emptyText}>No caregivers added</Text>
+          <Text style={styles.emptySubText}>
+            Add family, friends, or emergency contacts
+          </Text>
+        </View>
       ) : (
-        caregivers.map((caregiver) => (
+        caregivers.map(caregiver => (
           <View key={caregiver.id} style={styles.caregiverCard}>
-            <View style={styles.caregiverInfo}>
-              <Text style={styles.caregiverName}>{caregiver.name}</Text>
-              <Text style={styles.caregiverPhone}>{caregiver.phone}</Text>
-              <Text style={styles.caregiverRelation}>{caregiver.relationship}</Text>
+            <View style={styles.avatar}>
+              <Text style={styles.avatarText}>
+                {caregiver.name.charAt(0).toUpperCase()}
+              </Text>
             </View>
+
+            <View style={styles.caregiverInfo}>
+              <Text style={styles.name}>{caregiver.name}</Text>
+              <Text style={styles.phone}>{caregiver.phone}</Text>
+              <Text style={styles.relation}>{caregiver.relationship}</Text>
+            </View>
+
             <TouchableOpacity
               style={styles.removeButton}
               onPress={() => removeCaregiver(caregiver.id)}
             >
-              <Text style={styles.removeButtonText}>Remove</Text>
+              <Text style={styles.removeText}>✕</Text>
             </TouchableOpacity>
           </View>
         ))
       )}
 
-      <Text style={styles.instructions}>
-        These caregivers will receive SMS alerts if you miss your metro stop.
-        Add at least one caregiver for safety.
-      </Text>
+      {/* Info Section */}
+      <View style={styles.infoBox}>
+        <Text style={styles.infoTitle}>How Caregivers Help:</Text>
+        <Text style={styles.infoText}>
+          • Receive SMS alerts if you miss your stop
+        </Text>
+        <Text style={styles.infoText}>
+          • You can choose which caregivers to notify for each journey
+        </Text>
+        <Text style={styles.infoText}>
+          • Emergency safety backup system
+        </Text>
+      </View>
     </ScrollView>
   );
 }
@@ -145,30 +172,35 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 32,
-    fontWeight: 'bold',
+    fontSize: 26,
+    fontWeight: '600',
     color: '#2c3e50',
-    marginTop: 20,
-    marginBottom: 10,
+    marginBottom: 6,
+    marginTop: 10,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#7f8c8d',
-    marginBottom: 30,
+    marginBottom: 25,
   },
-  formContainer: {
+  card: {
     backgroundColor: 'white',
     padding: 20,
     borderRadius: 12,
-    marginBottom: 30,
     borderWidth: 1,
     borderColor: '#e0e0e0',
+    marginBottom: 25,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 2,
   },
-  formTitle: {
+  cardTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#2c3e50',
+    fontWeight: '600',
     marginBottom: 15,
+    color: '#2c3e50',
   },
   input: {
     backgroundColor: '#f8f9fa',
@@ -177,77 +209,134 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 14,
     fontSize: 16,
-    marginBottom: 15,
+    marginBottom: 12,
   },
-  addButton: {
+  primaryButton: {
     backgroundColor: '#2ecc71',
     padding: 16,
     borderRadius: 8,
     alignItems: 'center',
+    marginTop: 5,
   },
-  addButtonText: {
+  disabledButton: {
+    backgroundColor: '#95a5a6',
+    opacity: 0.6,
+  },
+  primaryButtonText: {
     color: 'white',
     fontSize: 16,
     fontWeight: '600',
   },
-  listTitle: {
+  sectionTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: '600',
+    marginBottom: 15,
     color: '#2c3e50',
+  },
+  emptyBox: {
+    backgroundColor: 'white',
+    padding: 40,
+    borderRadius: 12,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    marginBottom: 20,
+  },
+  emptyEmoji: {
+    fontSize: 48,
     marginBottom: 15,
   },
   emptyText: {
     fontSize: 16,
     color: '#7f8c8d',
+    marginBottom: 8,
+  },
+  emptySubText: {
+    fontSize: 14,
+    color: '#95a5a6',
     textAlign: 'center',
-    padding: 30,
   },
   caregiverCard: {
     backgroundColor: 'white',
-    padding: 20,
     borderRadius: 12,
-    marginBottom: 15,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    padding: 16,
+    marginBottom: 12,
     borderWidth: 1,
     borderColor: '#e0e0e0',
+    flexDirection: 'row',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  avatar: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#3498db',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 15,
+  },
+  avatarText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   caregiverInfo: {
     flex: 1,
   },
-  caregiverName: {
-    fontSize: 18,
+  name: {
+    fontSize: 16,
     fontWeight: '600',
     color: '#2c3e50',
-    marginBottom: 5,
+    marginBottom: 4,
   },
-  caregiverPhone: {
-    fontSize: 16,
-    color: '#3498db',
-    marginBottom: 5,
-  },
-  caregiverRelation: {
+  phone: {
     fontSize: 14,
+    color: '#3498db',
+    marginBottom: 3,
+  },
+  relation: {
+    fontSize: 13,
     color: '#7f8c8d',
+    fontStyle: 'italic',
   },
   removeButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     backgroundColor: '#e74c3c',
-    paddingHorizontal: 15,
-    paddingVertical: 8,
-    borderRadius: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 10,
   },
-  removeButtonText: {
+  removeText: {
     color: 'white',
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
-  instructions: {
+  infoBox: {
+    backgroundColor: '#e8f4fc',
+    padding: 20,
+    borderRadius: 12,
+    marginTop: 20,
+    marginBottom: 40,
+    borderWidth: 1,
+    borderColor: '#3498db',
+  },
+  infoTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#2c3e50',
+    marginBottom: 10,
+  },
+  infoText: {
     fontSize: 14,
-    color: '#7f8c8d',
-    textAlign: 'center',
-    marginTop: 30,
-    marginBottom: 20,
-    lineHeight: 20,
+    color: '#34495e',
+    marginBottom: 6,
+    marginLeft: 10,
   },
 });
