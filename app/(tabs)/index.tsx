@@ -3,7 +3,8 @@ import {
   StyleSheet, 
   Text, 
   View, 
-  TouchableOpacity 
+  TouchableOpacity,
+  ScrollView  // ← Add this import
 } from 'react-native';
 import { Link } from 'expo-router';
 import * as Haptics from 'expo-haptics';
@@ -26,7 +27,7 @@ export default function HomeTab() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>  {/* ← Change View to ScrollView */}
       {/* App Title */}
       <Text style={styles.title}>🚇 Metro Alert System</Text>
       <Text style={styles.subtitle}>Safe travel for deaf & memory-impaired users</Text>
@@ -117,7 +118,26 @@ export default function HomeTab() {
           If you miss your stop or need help, the app will notify your caregivers immediately
         </Text>
       </View>
-    </View>
+
+      {/* Additional Info Section (for testing scroll) */}
+      <View style={styles.additionalInfo}>
+        <Text style={styles.additionalTitle}>📋 Features at a Glance</Text>
+        <Text style={styles.additionalText}>• Real-time metro tracking</Text>
+        <Text style={styles.additionalText}>• Vibration alerts for deaf users</Text>
+        <Text style={styles.additionalText}>• Caregiver notification system</Text>
+        <Text style={styles.additionalText}>• Location-based accuracy</Text>
+        <Text style={styles.additionalText}>• Simple, accessible interface</Text>
+        <Text style={styles.additionalText}>• Works offline when needed</Text>
+      </View>
+
+      {/* Contact Support */}
+      <View style={styles.supportBox}>
+        <Text style={styles.supportTitle}>Need Help?</Text>
+        <Text style={styles.supportText}>
+          For assistance or to provide feedback, contact support@metroalerts.example.com
+        </Text>
+      </View>
+    </ScrollView>
   );
 }
 
@@ -237,6 +257,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#ffeaa7',
+    marginBottom: 25,
   },
   emergencyTitle: {
     fontSize: 16,
@@ -248,5 +269,46 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#d35400',
     lineHeight: 20,
+  },
+  additionalInfo: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 12,
+    marginBottom: 25,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+  },
+  additionalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#2c3e50',
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  additionalText: {
+    fontSize: 14,
+    color: '#34495e',
+    marginBottom: 8,
+    marginLeft: 10,
+  },
+  supportBox: {
+    backgroundColor: '#e8f4fc',
+    padding: 15,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#3498db',
+    marginBottom: 40,
+  },
+  supportTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#2c3e50',
+    marginBottom: 8,
+  },
+  supportText: {
+    fontSize: 14,
+    color: '#34495e',
+    lineHeight: 20,
+    textAlign: 'center',
   },
 });

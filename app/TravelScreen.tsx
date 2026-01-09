@@ -1,3 +1,4 @@
+// travel/TravelScreen.tsx
 import React, { useState } from 'react';
 import {
   View,
@@ -6,13 +7,20 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import { useRouter } from 'expo-router';
-import { metroStations } from './utils/metroStations';
-import type { MetroStation } from './utils/metroStations';
+import { metroStations, type MetroStation } from './utils/metroStations';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 
 export default function TravelScreen() {
   const router = useRouter();
-  const [selectedStation, setSelectedStation] = useState<MetroStation | null>(null);
+  const searchParams = useLocalSearchParams<{ line: string }>();
+  const line = searchParams.line; // metro line passed from set-destination page
+
+  const [selectedStation, setSelectedStation] =
+    useState<MetroStation | null>(null);
+
+  const filteredStations = line
+    ? metroStations.filter((station) => station.line === line)
+    : metroStations;
 
   const startJourney = () => {
     if (!selectedStation) return;
@@ -27,10 +35,10 @@ export default function TravelScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Select Destination</Text>
+      <Text style={styles.title}>Select Destination - {line} Line</Text>
 
       <FlatList
-        data={metroStations}
+        data={filteredStations}
         keyExtractor={(item) => item.name}
         renderItem={({ item }) => (
           <TouchableOpacity
@@ -60,7 +68,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f8f9fa',
   },
   title: {
     fontSize: 20,

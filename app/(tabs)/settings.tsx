@@ -63,34 +63,7 @@ export default function SettingsTab() {
         </View>
       </View>
 
-      {/* Accessibility Settings */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Accessibility</Text>
-        
-        <View style={styles.settingRow}>
-          <View style={styles.settingInfo}>
-            <Text style={styles.settingName}>Large Text</Text>
-            <Text style={styles.settingDescription}>Increase text size throughout app</Text>
-          </View>
-          <Switch
-            value={largeTextEnabled}
-            onValueChange={setLargeTextEnabled}
-            trackColor={{ false: '#ddd', true: '#3498db' }}
-          />
-        </View>
-
-        <View style={styles.settingRow}>
-          <View style={styles.settingInfo}>
-            <Text style={styles.settingName}>High Contrast Mode</Text>
-            <Text style={styles.settingDescription}>Better visibility for low vision</Text>
-          </View>
-          <Switch
-            value={highContrast}
-            onValueChange={setHighContrast}
-            trackColor={{ false: '#ddd', true: '#3498db' }}
-          />
-        </View>
-      </View>
+      
 
       {/* Alert Timing */}
       <View style={styles.section}>
@@ -116,14 +89,6 @@ export default function SettingsTab() {
         
         <TouchableOpacity style={styles.menuButton}>
           <Text style={styles.menuButtonText}>Privacy Policy</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity style={styles.menuButton}>
-          <Text style={styles.menuButtonText}>Terms of Service</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity style={styles.menuButton}>
-          <Text style={styles.menuButtonText}>Version 1.0.0</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

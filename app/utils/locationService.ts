@@ -151,3 +151,5 @@ export class LocationService {
     };
   }
 }
+// Add this at the end of locationService.ts:
+export default LocationService;
