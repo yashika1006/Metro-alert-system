@@ -5,6 +5,10 @@ The **Metro Alert App** is a mobile application designed to assist **deaf, hard-
 
  ## Video
 
+
+https://github.com/user-attachments/assets/6ccfbb72-3d2f-4bf0-90c7-fdf7c36fb989
+
+
 ## Features
 
 - **Real-time GPS Tracking** – Continuously monitors the commuter’s location and distance to the selected metro station.  
@@ -21,11 +25,12 @@ The **Metro Alert App** is a mobile application designed to assist **deaf, hard-
 git clone https://github.com/yourusername/metro-alert-app.git
 cd metro-alert-app/MetroAlertApp
 
-Install dependencies
+2. Install dependencies
 npm install
 
-Start the Expo server
+3. Start the Expo server
 npx expo start
+
 Note: Test the app on a physical device to experience GPS tracking and haptic alerts. Simulators may not provide vibration feedback.
 
 Technologies Used
