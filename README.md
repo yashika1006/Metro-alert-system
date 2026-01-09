@@ -1,50 +1,38 @@
-# Welcome to your Expo app 👋
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+# Metro Alert App
 
-## Get started
+The **Metro Alert App** is a mobile application designed to assist **deaf, hard-of-hearing, and elderly commuters** in navigating metro journeys safely and independently. The app provides real-time location tracking, haptic alerts as users approach their destination, and caregiver notifications in case of missed stops or emergencies.
 
-1. Install dependencies
+ ## Video
 
-   ```bash
-   npm install
-   ```
+## Features
 
-2. Start the app
+- **Real-time GPS Tracking** – Continuously monitors the commuter’s location and distance to the selected metro station.  
+- **Haptic Alerts** – Vibrates the phone to notify users when their stop is approaching, with customizable vibration patterns for warning, success, and error.  
+- **Missed Stop Notifications** – Automatically alerts designated caregivers if a stop is missed.  
+- **Emergency Alerts** – Instantly notifies caregivers in urgent situations.  
+- **Metro Line and Station Selection** – Allows users to choose stations from multiple metro lines.  
+- **Caregiver Integration** – Users can assign caregivers who receive notifications in case of missed stops or emergencies.  
 
-   ```bash
-   npx expo start
-   ```
 
-In the output, you'll find options to open the app in a
+## Installation
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+1. **Clone the repository**  
+git clone https://github.com/yourusername/metro-alert-app.git
+cd metro-alert-app/MetroAlertApp
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+Install dependencies
+npm install
 
-## Get a fresh project
+Start the Expo server
+npx expo start
+Note: Test the app on a physical device to experience GPS tracking and haptic alerts. Simulators may not provide vibration feedback.
 
-When you're ready, run:
+Technologies Used
+React Native – Cross-platform mobile app development framework.
 
-```bash
-npm run reset-project
-```
+Expo – Handles location and haptic features.
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+TypeScript – Type-safe coding for improved reliability.
 
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Expo Location & Haptics – Provides real-time GPS tracking and vibration alerts.
